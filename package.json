@@ -1,0 +1,28 @@
+{
+  "name": "Chat-App",
+  "version": "1.0.0",
+  "description": "Chat App in Node ",
+  "main": "index.js",
+  "dependencies": {
+    "socket.io": "^1.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikemoye14/Chat-App.git"
+  },
+  "keywords": [
+    "Chat",
+    "App",
+    "Node"
+  ],
+  "author": "Mike Moye",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikemoye14/Chat-App/issues"
+  },
+  "homepage": "https://github.com/mikemoye14/Chat-App"
+}
