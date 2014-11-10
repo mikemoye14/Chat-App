@@ -64,6 +64,24 @@
 			</div>
 		</div>
 	</div>
+	<div id="invalidUserNameModal" class="modal" data-backdrop="static">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Invalid UserName</h3>
+					<hr />					
+				</div>
+				<div class="modal-body">
+					<p>The UserName <strong>'<span id="invalidUserName"></span>'</strong> is already in use.
+					Please choose another UserName.</p>
+				</div>
+				<div class="modal-footer">
+					<hr />
+					<div class="btn btn-primary" data-dismiss="modal">Close</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div style="padding: 10px;">
 		<p>	author: Mike Moye</p>
 	</div>
@@ -78,11 +96,11 @@
 		});
 
 		socket.on('init', function(msg) {
-			$('#content').append('<li>' + msg + '</li>');
+			$('#content').append('<li><p>' + msg + '</p></li>');
 		});
 
 		socket.on('name', function(user) {			
-			$('#content').append('<li>' + user.userName + ' connected.</li>');
+			$('#content').append('<li><p>' + user.userName + ' connected.</p></li>');
 			$('#sideContent').append('<li id="' + user.id + '" style="padding: 2px; margin: 2px;">' +
 										'<span style="color: lime; font-size: 20pt; vertical-align: middle;">&bull;</span>' + user.userName + 
 									'</li>');
@@ -99,8 +117,29 @@
 		});
 		  
 		socket.on("disconnect", function () {
-			$('#content').append('<li>Disconnected from chat server</li>');
+			$('#content').append('<li><p>Disconnected from chat server</p></li>');
 		});
+		
+		socket.on("validName", function (name) {
+			user = name;
+			$('#chatMsg').removeAttr('disabled');
+			$('#chatMsg').css('cursor', 'auto');
+			$('#chatButton').removeAttr('disabled');
+			$('#chatButton').css('cursor', 'pointer');
+			$('#nameDiv').html('<div style="text-align: center;">' +
+								'You are connected as:<br />' +
+									'<span style="font-weight: bolder;">'
+										+ user +
+									'</span>' +
+							'</div>');
+			
+		});
+		
+		socket.on("invalidName", function (name) {
+			$('#invalidUserName').html(name);		
+			$('#invalidUserNameModal').modal('show');
+			$('#name').val('');
+		});		
 
 		$('#nameButton').click(function(){		
 			sendName();
@@ -139,18 +178,9 @@
 		}
 		
 		function sendName(){		
-			user = $('#name').val();
+			
 			socket.emit('name', $('#name').val());
-			$('#chatMsg').removeAttr('disabled');
-			$('#chatMsg').css('cursor', 'auto');
-			$('#chatButton').removeAttr('disabled');
-			$('#chatButton').css('cursor', 'pointer');
-			$('#nameDiv').html('<div style="text-align: center;">' +
-								'You are connected as:<br />' +
-									'<span style="font-weight: bolder;">'
-										+ user +
-									'</span>' +
-							'</div>');
+			
 			return false;		
 		}
 		
@@ -159,10 +189,9 @@
 				$('#sideContent').append('<li id="' + user.id + '" style="padding: 2px; margin: 2px;">' +
 										'<span style="color: lime; font-size: 20pt; vertical-align: middle;">&bull;</span>' + user.userName + 
 									'</li>');									
-			});
-		
+			});		
 		});
-	
+		
 	</script>
 	</body>
 </html>

@@ -17,23 +17,37 @@ var server = http.createServer(function(req, res){
 });
 
 users = [];
-users[0] = {id: '0', userName: 'MikeMoye14'};
 
 var socket = require('socket.io').listen(server);
 
 socket.sockets.on('connection', function (socket) {
 
 	console.log('Socket conection established from ' + socket.handshake.address);
+	socket.broadcast.emit('users', users);
 	
 	socket.on('init', function (data) {	
 		socket.emit('init', 'Connected to chat server');		 
 		socket.emit('users', users);
 	});	
 	
-	socket.on('name', function (data) {		
-		users.push({id: socket.id, userName: data.toString()});	
-		socket.broadcast.emit('name', {id: socket.id, userName: data.toString()});
-		console.log(data.toString() + ' connected.');		
+	socket.on('name', function (name) {	
+		var nameAvailable = true;	
+		try{	
+			users.forEach(function(val, index, users){			
+				if(val.userName == name){					
+					nameAvailable = false;
+				}		
+			});	
+		}finally{
+			if(nameAvailable){
+				users.push({id: socket.id, userName: name});	
+				socket.broadcast.emit('name', {id: socket.id, userName: name});
+				console.log(name + ' connected.');
+				socket.emit('validName', name);				
+			}else{
+				socket.emit('invalidName', name);
+			}		
+		}
    });
 
 	socket.on('chatMsg', function (data) {	
