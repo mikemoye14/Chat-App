@@ -61,7 +61,7 @@ socket.sockets.on('connection', function (socket) {
 			if(val.id == socket.id){			
 				console.log(val.userName + ' disconnected.');
 				users.splice(index,1);
-				socket.broadcast.emit('chatMsg', val.userName + ' discconected.');
+				socket.broadcast.emit('chatMsg', val.userName + ' disconnected.');
 				socket.broadcast.emit('userDisconnect', val.id);			
 			}		
 		});
