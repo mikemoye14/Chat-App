@@ -12,8 +12,8 @@ var server = http.createServer(function(req, res){
 		});
 	});	
 	return;
-}).listen(8000, function(){
-	console.log("Listening on port '8000'");
+}).listen(3000, function(){
+	console.log("Listening on port '3000'");
 });
 
 users = [];
