@@ -22,7 +22,7 @@ var socket = require('socket.io').listen(server);
 
 socket.sockets.on('connection', function (socket) {
 
-	console.log('Socket conection established from ' + socket.handshake.address);
+	console.log('Connection established from: ' + socket.address().address + ' : ' + socket.address().port + ' - version: ' + socket.address().family); 
 	socket.broadcast.emit('users', users);
 	
 	socket.on('init', function (data) {	
