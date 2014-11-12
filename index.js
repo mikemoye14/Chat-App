@@ -14,6 +14,8 @@ var server = http.createServer(function(req, res){
 	return;
 }).listen(3000, function(){
 	console.log("Listening on port '3000'");
+}).on('connection', function(socket){
+    console.log('Connection established from: ' + socket.address().address + ' : ' + socket.address().port + ' - version: ' + socket.address().family);
 });
 
 users = [];
@@ -21,8 +23,6 @@ users = [];
 var socket = require('socket.io').listen(server);
 
 socket.sockets.on('connection', function (socket) {
-
-	console.log('Connection established from: ' + socket.address().address + ' : ' + socket.address().port + ' - version: ' + socket.address().family); 
 	socket.broadcast.emit('users', users);
 	
 	socket.on('init', function (data) {	
